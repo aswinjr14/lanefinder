@@ -70,9 +70,6 @@ Calculate radius and distance from centre
 As per standards, lane length is assumed to be 3.7m. Distance from centre is calculated by using difference bewtween the centre of image width and nearest left and right points of the image. The difference is multiplied by the 3.7/700.
 ![Final image](./output_images/finalimage.jpg)
 
-Project output
----
-![](project_video_output_shortclip.mp4)
 Shortcomings
 ---
 Although this method is able to detect lane lines in curves, its till not able to track the lane lines in brightened images as seen in challenge_video and harder_challenge_videos. It will also fail where the lane lines are broken 
