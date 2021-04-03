@@ -1,6 +1,6 @@
 ## Advanced Lane Finding
 [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
-![Lanes Image](./examples/example_output.jpg)
+![Lanes Image](./output_images/finalimage.jpg)
 
 In this project, your goal is to write a software pipeline to identify the lane boundaries in a video, but the main output or product we want you to create is a detailed writeup of the project.  Check out the [writeup template](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_template.md) for this project and use it as a starting point for creating your own writeup.  
 
@@ -28,12 +28,51 @@ The goals / steps of this project are the following:
 
 The images for camera calibration are stored in the folder called `camera_cal`.  The images in `test_images` are for testing your pipeline on single frames.  If you want to extract more test images from the videos, you can simply use an image writing method like `cv2.imwrite()`, i.e., you can read the video in frame by frame as usual, and for frames you want to save for later you can write to an image file.  
 
-To help the reviewer examine your work, please save examples of the output from each stage of your pipeline in the folder called `output_images`, and include a description in your writeup for the project of what each image shows.    The video called `project_video.mp4` is the video your pipeline should work well on.  
+###Pipeline
 
-The `challenge_video.mp4` video is an extra (and optional) challenge for you if you want to test your pipeline under somewhat trickier conditions.  The `harder_challenge.mp4` video is another optional challenge and is brutal!
+Camera calibration using chessboard images
+---
 
-If you're feeling ambitious (again, totally optional though), don't stop there!  We encourage you to go out and take video of your own, calibrate your camera and show us how you would implement this project from scratch!
+Camera calibration is done using set of chessboard images in camera_cal folder. Corners are found using findChessboardCorners(). mtx and dist points are calculated from calibrateCamers() function
 
-## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
+|Original Image|Calibrated Image|
+|--------------|----------------|
+|![original image](./camera_cal/calibration14.jpg)|![calibrated image](./output_images/cameracalibration/camcal_14.jpg)|
 
+Apply color transforms, sobel..etc., to create a thresholdedbinary image
+---
+
+Apply both gray scale and HLS scale, it can be seen from the images that yellow line are more visible in HLS scale.
+![Hls image](./output_images/hlsscale.jpg)
+
+Combined threshold is developed by applying sobel operator on both the gray scale image and hls scale image
+|Color binary image|Combined binary image|
+|--------------|----------------|
+|![color binary image](./output_images/color_binary.jpg)|![combined binary image](./output_images/combined_binary.jpg)|
+
+Apply perspective transform on combined binary image
+---
+getPerspectiveTransform() is applied to get the birds eye view of a given region of intrest
+![warped image](./output_images/warped_image.jpg)
+
+Draw lane lines on warped image
+---
+Using the above warped image get the lane lines using max histogram values on btoh sides. Then fit a second order polynomial line for both sides.
+![Lane lines on warped image](./output_images/fittedpolynomialimage.jpg)
+
+Apply inverse perspective and draw lane lines on original image
+---
+Apply inverse perspective transform on the weighted warped image  and add it to the original image
+![Weighted image](./output_images/weightedimage.jpg)
+
+Calculate radius and distance from centre
+---
+As per standards, lane length is assumed to be 3.7m. Distance from centre is calculated by using difference bewtween the centre of image width and nearest left and right points of the image. The difference is multiplied by the 3.7/700.
+![Final image](./output_images/finalimage.jpg)
+
+Project output
+---
+![](project_video_output_shortclip.mp4)
+Shortcomings
+---
+Although this method is able to detect lane lines in curves, its till not able to track the lane lines in brightened images as seen in challenge_video and harder_challenge_videos. It will also fail where the lane lines are broken 
