@@ -28,8 +28,8 @@ The goals / steps of this project are the following:
 
 The images for camera calibration are stored in the folder called `camera_cal`.  The images in `test_images` are for testing your pipeline on single frames.  If you want to extract more test images from the videos, you can simply use an image writing method like `cv2.imwrite()`, i.e., you can read the video in frame by frame as usual, and for frames you want to save for later you can write to an image file.  
 
-###Pipeline
-
+Pipeline
+---
 Camera calibration using chessboard images
 ---
 
@@ -70,9 +70,6 @@ Calculate radius and distance from centre
 As per standards, lane length is assumed to be 3.7m. Distance from centre is calculated by using difference bewtween the centre of image width and nearest left and right points of the image. The difference is multiplied by the 3.7/700.
 ![Final image](./output_images/finalimage.jpg)
 
-Project output
----
-![](project_video_output_shortclip.mp4)
 Shortcomings
 ---
 Although this method is able to detect lane lines in curves, its till not able to track the lane lines in brightened images as seen in challenge_video and harder_challenge_videos. It will also fail where the lane lines are broken 
